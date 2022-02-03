@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            text-align: center;
+            font-weight: bold;
+            background-color: aqua;
+        }
+
+        .container{
+            display: flex;
+            justify-content: center;
+            align-items:center ;
+            height: 100vh;
+        }
+    
+        .innercontainer{
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            height: 200px;
+            border-radius: 17px;
+background: #d24b4b;
+box-shadow:  23px 23px 46px #b54141,
+             -23px -23px 46px #ef5656;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="innercontainer">
+            <div class="weather-container">
+
+
+                <div id="image">image</div>
+                <div id="temperature">temperature</div>
+                <div id="location">location</div>
+                <div id="summary">summary</div>
+    
+            </div>
+
+        </div>
+       
+    </div>
+
+    <script>
+
+        var lattitude;
+        var longitude;
+        var apiKey = 'a4b8ca7c0c6e298b9d79bb626fbf1593' ;
+        var image = document.getElementById('image');
+        var temperature = document.getElementById('temperature');
+        var loc = document.getElementById('location');
+        var summary = document.getElementById('summary');
+
+        navigator.geolocation.getCurrentPosition((position)=>{
+            lattitude= position.coords.latitude;
+            longitude= position.coords.longitude;
+            
+
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lattitude}&lon=${longitude}&appid=${apiKey}`)
+            .then(response=> response.json())
+            .then(data=>{
+                console.log(data)
+                temperature.innerHTML= Math.floor(data.main.temp- 273.2)+ "°C";
+                loc.innerHTML= data.name
+                summary.innerHTML=data.weather[0].description;
+                var imageUrl = "http://openweathermap.org/img/wn/" + data.weather[0].icon+ "@2x.png";
+                image.innerHTML= `<img src="${imageUrl}">`
+            })
+          
+
+
+        })
+       
+
+    </script>
+    
+</body>
+</html>
